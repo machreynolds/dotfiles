@@ -20,6 +20,7 @@ Plugin 'tpope/vim-commentary'
 Plugin 'tpope/vim-dispatch'
 Plugin 'tpope/vim-endwise'
 Plugin 'tpope/vim-fugitive'
+Plugin 'tpope/vim-markdown'
 Plugin 'tpope/vim-rsi'
 Plugin 'tpope/vim-scriptease'
 Plugin 'tpope/vim-sensible'
@@ -34,6 +35,8 @@ Plugin 'ntpeters/vim-better-whitespace'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'edkolev/tmuxline.vim'
 Plugin 'vim-scripts/a.vim'
+Plugin 'junegunn/vim-easy-align'
+Plugin 'machreynolds/custom-snippets'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -151,6 +154,15 @@ let g:airline#extensions#bufferline#enabled = 1
 
 au QuickFixCmdPost [^l]* nested cwindow
 au QuickFixCmdPost    l* nested lwindow
+
+set tabstop=4
+set shiftwidth=4
+set softtabstop=4
+set smartindent
+set expandtab
+
+set ignorecase
+set smartcase
 
 au FileType make set noexpandtab
 "au FileType python set noexpandtab
