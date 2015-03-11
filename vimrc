@@ -119,7 +119,7 @@ let g:UltiSnipsDontReverseSearchPath = "1"
 let g:UltiSnipsDoHash = 1
 
 " c style comments using *
-let g:surround_42 = "/* \r */"
+let g:surround_42 = "/*\r*/"
 
 let g:tmuxline_theme = 'jellybeans'
 
