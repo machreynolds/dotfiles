@@ -1,5 +1,4 @@
-"set nocompatible              " be iMproved, required
-"filetype off                  " required
+let g:python_host_prog='/opt/bats/bin/python'
 
 call plug#begin('~/.config/nvim/plugged')
 
@@ -19,23 +18,29 @@ Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
-Plug 'Valloric/YouCompleteMe', { 'do': './install.py --clang-completer --system-libclang' }
+Plug 'Valloric/YouCompleteMe', { 'do': 'export EXTRA_CMAKE_ARGS=\"-DPYTHON_EXECUTABLE=/opt/bats/bin/python -DPYTHON_LIBRARIES=/opt/bats/lib/libpython2.7.so -DPATH_TO_LLVM_ROOT=/home/swallace/tmp/llvm-install -DEXTRA_RPATH=/opt/bats/lib64\"; ./install.py --clang-completer' }
 Plug 'kien/ctrlp.vim'
 Plug 'ntpeters/vim-better-whitespace'
 Plug 'airblade/vim-gitgutter'
 Plug 'edkolev/tmuxline.vim'
 Plug 'vim-scripts/a.vim'
 Plug 'junegunn/vim-easy-align'
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+"Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'machreynolds/custom-snippets'
 Plug 'katonori/cxxtags-vim'
 Plug 'davidhalter/jedi-vim'
 Plug 'benmills/vimux'
 Plug 'pitluga/vimux-nose-test'
 Plug 'janko-m/vim-test'
+"Plug expand('file://$HOME/git_checkouts/vim-bats-waf')
+"Plug 'git@scodevtls:pub/swallace/vim-bats-waf'
 
 call plug#end()
 
+set nohlsearch
+set hidden
+
+set makeprg=cmake\ --build\ /tmp/build/clang.cmake\ --\ -j64\ 2\>\&1\|\ egrep\ -v\ '^ICECC\|\ note:'
 
 colorscheme jellybeans
 
@@ -77,6 +82,7 @@ map Q :qa<CR>
 let g:ycm_auto_trigger = 1
 let g:ycm_confirm_extra_conf = 0
 let g:ycm_goto_buffer_command = 'vertical-split'
+let g:ycm_always_populate_location_list = 1
 "let g:ycm_seed_identifiers_with_syntax = 1
 "let g:ycm_cache_omnifunc = 1
 "let g:ycm_add_preview_to_completeopt = 0
@@ -189,8 +195,8 @@ nnoremap <unique> <silent> <leader>O :CxxtagsListOverriden<CR>
 nnoremap <unique> <silent> <leader>t :CxxtagsListTypeInfo<CR>
 nnoremap <unique> <silent> <leader>u :CxxtagsUpdateDbFile<CR>
 
-map <leader>= :pyf /usr/local/share/clang/clang-format.py<cr>
-imap <leader>= <c-o>:pyf /usr/local/share/clang/clang-format.py<cr>
+map <leader>= :pyf /home/swallace/tmp/llvm-install/share/clang/clang-format.py<cr>
+imap <leader>= <c-o>:pyf /home/swallace/tmp/llvm-install/share/clang/clang-format.py<cr>
 
 " allow repeating in visual mode
 vnoremap . :norm.<CR>
