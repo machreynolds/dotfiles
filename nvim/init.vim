@@ -1,4 +1,7 @@
-let g:python_host_prog='/opt/bats/bin/python'
+let g:loaded_python_provider = 1 " disable python2
+let g:python3_host_prog = "/home/swallace/packages/Python-3.6.0/bin/python3"
+let g:ycm_server_python_interpreter = "/home/swallace/packages/Python-3.6.0/bin/python3"
+set guicursor=
 
 call plug#begin('~/.config/nvim/plugged')
 
@@ -18,20 +21,25 @@ Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
-Plug 'Valloric/YouCompleteMe', { 'do': 'export EXTRA_CMAKE_ARGS=\"-DPYTHON_EXECUTABLE=/opt/bats/bin/python -DPYTHON_LIBRARIES=/opt/bats/lib/libpython2.7.so -DPATH_TO_LLVM_ROOT=/home/swallace/tmp/llvm-install -DEXTRA_RPATH=/opt/bats/lib64\"; ./install.py --clang-completer' }
+"Plug 'Valloric/YouCompleteMe', { 'do': 'export EXTRA_CMAKE_ARGS=\"-DPYTHON_EXECUTABLE=/opt/bats/bin/python -DPYTHON_LIBRARIES=/opt/bats/lib/libpython2.7.so -DPATH_TO_LLVM_ROOT=/home/swallace/tmp/llvm-install -DEXTRA_RPATH=/opt/bats/lib64\"; ./install.py --clang-completer' }
+Plug 'Valloric/YouCompleteMe', { 'do': 'export EXTRA_CMAKE_ARGS=\"-DPYTHON_EXECUTABLE=/home/swallace/packages/Python-3.6.0/bin/python3 -DPYTHON_LIBRARIES=/home/swallace/packages/Python-3.6.0/lib/libpython3.6.so -DPATH_TO_LLVM_ROOT=/home/swallace/tmp/llvm-install -DEXTRA_RPATH=/opt/bats/lib64:/home/swallace/packages/Python-3.6.0/lib\"; python3 ./install.py --clang-completer' }
 Plug 'kien/ctrlp.vim'
 Plug 'ntpeters/vim-better-whitespace'
 Plug 'airblade/vim-gitgutter'
 Plug 'edkolev/tmuxline.vim'
 Plug 'vim-scripts/a.vim'
 Plug 'junegunn/vim-easy-align'
-"Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'machreynolds/custom-snippets'
 Plug 'katonori/cxxtags-vim'
 Plug 'davidhalter/jedi-vim'
 Plug 'benmills/vimux'
 Plug 'pitluga/vimux-nose-test'
 Plug 'janko-m/vim-test'
+Plug 'lyuts/vim-rtags'
+Plug 'sheerun/vim-polyglot'
+Plug 'Shougo/denite.nvim'
+Plug 'roxma/vim-tmux-clipboard'
+Plug 'dhruvasagar/vim-table-mode'
 "Plug expand('file://$HOME/git_checkouts/vim-bats-waf')
 "Plug 'git@scodevtls:pub/swallace/vim-bats-waf'
 
@@ -40,7 +48,7 @@ call plug#end()
 set nohlsearch
 set hidden
 
-set makeprg=cmake\ --build\ /tmp/build/clang.cmake\ --\ -j64\ 2\>\&1\|\ egrep\ -v\ '^ICECC\|\ note:'
+set makeprg=cmake\ --build\ /opt/ecn/users/swallace/build\ --\ -j64\ 2\>\&1\|\ egrep\ -v\ '^ICECC\|\ note:'
 
 colorscheme jellybeans
 
@@ -86,8 +94,8 @@ let g:ycm_always_populate_location_list = 1
 "let g:ycm_seed_identifiers_with_syntax = 1
 "let g:ycm_cache_omnifunc = 1
 "let g:ycm_add_preview_to_completeopt = 0
-"let g:ycm_autoclose_preview_window_after_insertion = 1
-"let g:ycm_autoclose_preview_window_after_completion = 1
+let g:ycm_autoclose_preview_window_after_insertion = 1
+let g:ycm_autoclose_preview_window_after_completion = 1
 "let g:ycm_min_num_identifier_candidate_chars = 0
 "let g:ycm_global_ycm_extra_conf = '~/.vim/ycm_extra_conf.py'
 "let g:ycm_semantic_triggers = {
@@ -108,6 +116,7 @@ let g:ycm_collect_identifiers_from_tags_files = 1
 " YouCompleteMe
 " reference: [ycm-jedi-vim]
 " jedi-vim {
+  let g:jedi#force_py_version=3
   let g:jedi#auto_vim_configuration = 0
   let g:jedi#popup_on_dot = 0
   let g:jedi#popup_select_first = 0
@@ -186,17 +195,8 @@ au FileType gitcommit set spell
 
 let test#strategy = "dispatch"
 
-let g:CXXTAGS_DatabaseDir = '/home/swallace/cpp/build.clang/debug/_db'
-nnoremap <unique> <silent> <leader>d :CxxtagsOpenDecl<CR>
-nnoremap <unique> <silent> <leader>r :CxxtagsListRefs<CR>
-nnoremap <unique> <silent> <leader>D :CxxtagsOpenDef<CR>
-nnoremap <unique> <silent> <leader>o :CxxtagsListOverride<CR>
-nnoremap <unique> <silent> <leader>O :CxxtagsListOverriden<CR>
-nnoremap <unique> <silent> <leader>t :CxxtagsListTypeInfo<CR>
-nnoremap <unique> <silent> <leader>u :CxxtagsUpdateDbFile<CR>
-
-map <leader>= :pyf /home/swallace/tmp/llvm-install/share/clang/clang-format.py<cr>
-imap <leader>= <c-o>:pyf /home/swallace/tmp/llvm-install/share/clang/clang-format.py<cr>
+map <leader>= :py3f ~/bin/clang-format.py<cr>
+imap <leader>= <c-o>:py3f ~/bin/clang-format.py<cr>
 
 " allow repeating in visual mode
 vnoremap . :norm.<CR>
