@@ -1,0 +1,7 @@
+function f() {
+    git ls-files | grep -i "$@"
+}
+
+function v() {
+    vim $(echo $1 | sed 's/:\([^:]*\).*/ +\1/')
+}
