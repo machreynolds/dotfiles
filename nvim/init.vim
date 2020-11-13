@@ -78,6 +78,8 @@ Plug 'ryanoasis/vim-devicons'  " File icons: works with vim-ariline.
 Plug 'vim-airline/vim-airline'  " Like powerline
 Plug 'vim-airline/vim-airline-themes'
 Plug 'nanotech/jellybeans.vim'
+Plug 'morhetz/gruvbox'
+Plug 'edkolev/tmuxline.vim'
 
 " Syntax highlighting
 " ~~~~~~~~~~~~~~~~~
@@ -116,9 +118,9 @@ if !has('gui_running')
 	hi Normal guibg=NONE
 endif
 
-colorscheme jellybeans
+colorscheme gruvbox
 "
-let g:airline_theme = 'jellybeans'
+let g:airline_theme = 'gruvbox'
 let g:airline_powerline_fonts = 1
 
 " :terminal colors
