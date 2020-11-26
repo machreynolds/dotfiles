@@ -87,7 +87,7 @@ Plug 'nvim-lua/telescope.nvim'
 
 " Appearance Plugins
 " ~~~~~~~~~~~~~~~~~~
-Plug 'ryanoasis/vim-devicons'  " File icons: works with vim-ariline.
+Plug 'ryanoasis/vim-devicons'  " File icons: works with vim-airline.
 Plug 'vim-airline/vim-airline'  " Like powerline
 Plug 'vim-airline/vim-airline-themes'
 Plug 'nanotech/jellybeans.vim'
@@ -136,6 +136,9 @@ colorscheme gruvbox
 "
 let g:airline_theme = 'gruvbox'
 let g:airline_powerline_fonts = 1
+
+let g:webdevicons_enable_airline_tabline = 1
+let g:webdevicons_enable_airline_statusline = 1
 
 " :terminal colors
 " ~~~~~~~~~~~~~~~~
@@ -257,6 +260,8 @@ nnoremap <silent> <leader>do :OpenDiagnostic<CR>
 
 " Fuzzy ripgrep
 nnoremap <silent> <space>/  <cmd>Rg<cr>
+nnoremap <silent> <space>*  :execute 'Rg' '\b' . expand('<cword>') . '\b'<cr>
+xnoremap <silent> <space>/  y:Rg <C-R>"<cr>
 " vim commands
 nnoremap <silent> <space>c  <cmd>Commands<cr>
 " Show maps
