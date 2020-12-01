@@ -26,6 +26,7 @@ set grepformat=%f:%l:%c:%m
 " set relativenumber
 set signcolumn=yes  " for vim-pandoc-syntax and vim-signify
 set splitright " open vnew windows to the right
+set nowrap
 
 "" Default formatting when not detected
 set smartindent
@@ -312,4 +313,5 @@ vnoremap . :norm.<CR>
 " select just pasted text
 nnoremap gp `[v`]
 
+autocmd TabNewEntered * Startify
 let g:startify_change_to_vcs_root = 1
