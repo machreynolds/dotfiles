@@ -23,7 +23,7 @@ set cmdheight=2  " Useful for diagnostics
 set number  " Show line number column
 set grepprg=rg\ --vimgrep\ $*
 set grepformat=%f:%l:%c:%m
-" set relativenumber
+set relativenumber
 set signcolumn=yes  " for vim-pandoc-syntax and vim-signify
 set splitright " open vnew windows to the right
 set nowrap
@@ -52,11 +52,13 @@ Plug 'townk/vim-autoclose'  " Auto-match pairs in insert mode
 Plug 'tpope/vim-commentary'  " Polygot keybinds for commenting code
 Plug 'tpope/vim-abolish' " :Subvert command
 Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-unimpaired' " quickfix navigation maps ]q, [q etc.
 Plug 'ConradIrwin/vim-bracketed-paste'  " Auto-sets paste
 Plug 'terryma/vim-expand-region' " syntax-aware expansion of visually-selected area
 Plug 'vim-scripts/a.vim' " alternate file
 Plug 'ntpeters/vim-better-whitespace'
+Plug 'romainl/vim-qf'
 
 " More powerful/sophisticated plugins
 " ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -100,6 +102,8 @@ Plug 'mhinz/vim-startify'
 " ~~~~~~~~~~~~~~~~~
 Plug 'norcalli/nvim-colorizer.lua' " Fastest color-code colorizer
 
+Plug 'ThePrimeagen/vim-be-good'
+
 call plug#end()
 
 " ==========
@@ -118,13 +122,6 @@ if has('transparency')
     set transparency=10
 endif
 
-" set cursorline  " Commented out because it slows (n)vim down.
-if exists('&pumblend')
-    set pumblend=15
-    set winblend=10
-    hi PmenuSel blend=10
-endif
-
 let g:one_allow_italics = 1
 
 hi Comment gui=italic
@@ -137,6 +134,8 @@ colorscheme gruvbox
 "
 let g:airline_theme = 'gruvbox'
 let g:airline_powerline_fonts = 1
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#formatter = 'short_path'
 
 let g:webdevicons_enable_airline_tabline = 1
 let g:webdevicons_enable_airline_statusline = 1
@@ -204,7 +203,6 @@ endfunction
 " Gen. Keymaps
 " ============
 
-" 'Ex mode is fucking dumb' --sircmpwm
 nnoremap Q <Nop>
 
 let mapleader = ','  " better than backslash imo
@@ -313,5 +311,15 @@ vnoremap . :norm.<CR>
 " select just pasted text
 nnoremap gp `[v`]
 
-autocmd TabNewEntered * Startify
+nnoremap <silent> <leader>s  <cmd>Startify<CR>
 let g:startify_change_to_vcs_root = 1
+
+packadd termdebug
+tnoremap <esc><esc> <C-\><C-N>
+
+" Sizing window vertically
+nnoremap <A-m> <C-W><
+nnoremap <A-/> <C-W>>
+" Sizing window horizontally
+nnoremap <A-,> <C-W>+
+nnoremap <A-.> <C-W>-
