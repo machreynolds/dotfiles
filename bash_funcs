@@ -5,3 +5,13 @@ function f() {
 function v() {
     vim $(echo $1 | sed 's/:\([^:]*\).*/ +\1/')
 }
+
+function t() {
+    tmux new-session -A -s main
+}
+
+function showpath() {
+    echo $PATH | tr ':' '\n'
+}
+
+# vi: ft=sh
