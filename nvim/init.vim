@@ -14,8 +14,6 @@ set wildoptions+=pum
 set mouse=a
 set lazyredraw
 set regexpengine=2
-set undofile
-set undolevels=2000
 set diffopt=vertical
 set pumheight=18
 set scrolloff=3
@@ -24,7 +22,6 @@ set number  " Show line number column
 set grepprg=rg\ --vimgrep\ $*
 set grepformat=%f:%l:%c:%m
 set relativenumber
-set signcolumn=yes  " for vim-pandoc-syntax and vim-signify
 set splitright " open vnew windows to the right
 set nowrap
 
@@ -56,7 +53,6 @@ Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-unimpaired' " quickfix navigation maps ]q, [q etc.
 Plug 'ConradIrwin/vim-bracketed-paste'  " Auto-sets paste
 Plug 'terryma/vim-expand-region' " syntax-aware expansion of visually-selected area
-Plug 'vim-scripts/a.vim' " alternate file
 Plug 'ntpeters/vim-better-whitespace'
 Plug 'romainl/vim-qf'
 
@@ -70,12 +66,15 @@ Plug 'nvim-lua/diagnostic-nvim' " wrap LSP diagnostic config
 Plug 'pierreglaser/folding-nvim', { 'for': ['lua', 'c', 'cpp', 'go'] } " LSP-powered folding
 Plug 'nvim-lua/lsp-status.nvim'  " lsp items in the statusbar
 Plug 'nvim-treesitter/nvim-treesitter' " tree-sitter support
+Plug 'tree-sitter/tree-sitter-cpp'
 " Completion sources
 Plug 'nvim-lua/completion-nvim' " sets up async autocomplete for LSP
 Plug 'nvim-treesitter/completion-treesitter' " tree-sitter source for completion-nvim
 Plug 'steelsojka/completion-buffers' " buffer source for completion-nvim
 Plug 'tpope/vim-dispatch' " async dispatch commands e.g. :Make
 Plug 'vimwiki/vimwiki'
+Plug 'nvim-treesitter/nvim-treesitter'
+Plug 'liuchengxu/vista.vim'
 
 " FZF
 " ~~~
@@ -205,7 +204,7 @@ endfunction
 
 nnoremap Q <Nop>
 
-let mapleader = ','  " better than backslash imo
+let mapleader = ' '
 " hide search
 nmap <silent> <leader><Space> :nohls<CR>
 " If hiding search wasn't enough for you
@@ -221,13 +220,15 @@ nnoremap <leader>l :set list!<CR>
 " Completions
 " ~~~~~~~~~~~
 " Use <Tab> and <S-Tab> to navigate through popup menu
-" inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
-" inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
 " Auto close popup menu when finish completion
 augroup completionstuff
     autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
 augroup END
+
+let g:completion_trigger_on_delete = 1
 
 " Set completeopt to have a better completion experience
 set completeopt=menuone,noinsert,noselect
@@ -289,6 +290,13 @@ let g:fzf_action = {
   \ 'ctrl-x': 'split',
   \ 'ctrl-v': 'vsplit' }
 
+xmap <leader><tab> <plug>(fzf-maps-x)
+omap <leader><tab> <plug>(fzf-maps-o)
+" imap <leader><tab> <plug>(fzf-maps-i)
+
+imap <c-x><c-k> <plug>(fzf-complete-word)
+imap <c-x><c-p> <plug>(fzf-complete-path)
+imap <c-x><c-l> <plug>(fzf-complete-line)
 
 " Make opening of files in the same directory easier, and use %% in command
 " mode to expand the directory of the current file.
@@ -314,12 +322,22 @@ nnoremap gp `[v`]
 nnoremap <silent> <leader>s  <cmd>Startify<CR>
 let g:startify_change_to_vcs_root = 1
 
-packadd termdebug
-tnoremap <esc><esc> <C-\><C-N>
+let g:AutoCloseExpandSpace = 0
 
-" Sizing window vertically
+noremap <leader>= :py3f clang-format.py<cr>
+
+packadd termdebug
+tnoremap <Esc><Esc> <C-\><C-n>
+
+" Sizing window horizontally
 nnoremap <A-m> <C-W><
 nnoremap <A-/> <C-W>>
-" Sizing window horizontally
+" Sizing window vertically
 nnoremap <A-,> <C-W>+
 nnoremap <A-.> <C-W>-
+
+autocmd FileType cpp setlocal commentstring=//\ %s
+
+let g:vista_default_executive = 'nvim_lsp'
+nnoremap <leader>vd <cmd>Vista finder fzf:nvim_lsp<CR>
+nnoremap <leader>vv <cmd>Vista!!<CR>

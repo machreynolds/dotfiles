@@ -11,5 +11,5 @@ require'nvim-treesitter.configs'.setup {
 			scope_decremental = 'grm',
 		}
 	},
-	ensure_installed = 'python'
+	ensure_installed = 'cpp'
 }

@@ -20,6 +20,23 @@ local custom_on_attach_diagnostics = function(_, bufnr)
   vim.g['diagnostic_enable_virtual_text'] = 1
 end
 
+local function preview_location_callback(_, method, result)
+  if result == nil or vim.tbl_isempty(result) then
+    vim.lsp.log.info(method, 'No location found')
+    return nil
+  end
+  if vim.tbl_islist(result) then
+    vim.lsp.util.preview_location(result[1])
+  else
+    vim.lsp.util.preview_location(result)
+  end
+end
+
+function peek_definition()
+  local params = vim.lsp.util.make_position_params()
+  return vim.lsp.buf_request(0, 'textDocument/definition', params, preview_location_callback)
+end
+
 local custom_on_attach = function(client, bufnr)
   api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
@@ -40,7 +57,8 @@ local custom_on_attach = function(client, bufnr)
   nmap_lsp('D',     'diagnostic.show_line_diagnostics()')
   nmap_lsp('<C-k>', 'buf.signature_help()')
   nmap_lsp(',rn',   'buf.rename()')
-  nmap_lsp('pd',    'buf.peek_definition()')
+  -- nmap_lsp('pd',    'buf.peek_definition()')
+  api.nvim_buf_set_keymap(bufnr, 'n', 'pd', '<cmd>lua peek_definition()<cr>', opts)
   nmap_lsp('gr',    'buf.references()')
   nmap_lsp('a',     'buf.code_action()')
   vim.g['diagnostic_enable_virtual_text'] = 1
