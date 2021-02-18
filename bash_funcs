@@ -1,9 +1,22 @@
+#!/bin/bash
 function f() {
     git ls-files | grep -i "$@"
 }
 
+function g() {
+    git grep -in "$@"
+}
+export -f g
+
 function v() {
-    vim $(echo $1 | sed 's/:\([^:]*\).*/ +\1/')
+    IFS=':' read -a input <<< $1
+    eval vim ${input[0]} +${input[1]}
+}
+export -f v
+
+function gf() {
+    local selected=$(rg -in --color=always "$@" | fzf --exit-0 --ansi --delimiter=: --preview-window +{2}-/2 --preview='$XDG_CONFIG_HOME/nvim/plugged/fzf.vim/bin/preview.sh {}')
+    [ -n "$selected" ] && v $selected
 }
 
 function t() {
