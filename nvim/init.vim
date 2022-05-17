@@ -14,6 +14,8 @@ set wildoptions+=pum
 set mouse=a
 set lazyredraw
 set regexpengine=2
+" set undofile
+" set undolevels=2000
 set diffopt=vertical
 set pumheight=18
 set scrolloff=3
@@ -22,6 +24,7 @@ set number  " Show line number column
 set grepprg=rg\ --vimgrep\ $*
 set grepformat=%f:%l:%c:%m
 set relativenumber
+"set signcolumn=yes  " for vim-pandoc-syntax and vim-signify
 set splitright " open vnew windows to the right
 set nowrap
 
@@ -33,6 +36,8 @@ set hidden
 
 " Spellfile
 set spellfile=~/.config/nvim/spell/en.utf-8.add
+
+let g:python3_host_prog="$XDG_DATA_HOME/venv/nvim/bin/python3"
 
 " =======
 " Plugins
@@ -55,6 +60,8 @@ Plug 'ConradIrwin/vim-bracketed-paste'  " Auto-sets paste
 Plug 'terryma/vim-expand-region' " syntax-aware expansion of visually-selected area
 Plug 'ntpeters/vim-better-whitespace'
 Plug 'romainl/vim-qf'
+Plug 'hrsh7th/vim-vsnip'
+Plug 'hrsh7th/vim-vsnip-integ'
 
 " More powerful/sophisticated plugins
 " ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -68,13 +75,19 @@ Plug 'nvim-lua/lsp-status.nvim'  " lsp items in the statusbar
 Plug 'nvim-treesitter/nvim-treesitter' " tree-sitter support
 Plug 'tree-sitter/tree-sitter-cpp'
 " Completion sources
-Plug 'nvim-lua/completion-nvim' " sets up async autocomplete for LSP
 Plug 'nvim-treesitter/completion-treesitter' " tree-sitter source for completion-nvim
-Plug 'steelsojka/completion-buffers' " buffer source for completion-nvim
 Plug 'tpope/vim-dispatch' " async dispatch commands e.g. :Make
 Plug 'vimwiki/vimwiki'
-Plug 'nvim-treesitter/nvim-treesitter'
 Plug 'liuchengxu/vista.vim'
+
+Plug 'neovim/nvim-lspconfig'
+Plug 'hrsh7th/cmp-nvim-lsp'
+Plug 'hrsh7th/cmp-buffer'
+Plug 'hrsh7th/cmp-path'
+Plug 'hrsh7th/cmp-cmdline'
+Plug 'hrsh7th/nvim-cmp'
+Plug 'hrsh7th/cmp-vsnip'
+Plug 'hrsh7th/vim-vsnip'
 
 " FZF
 " ~~~
@@ -181,6 +194,7 @@ lua << EOF
 require('lsp')
 require('colorizer_settings')
 require('treesitter')
+require('completion')
 EOF
 
 " =========
@@ -220,8 +234,8 @@ nnoremap <leader>l :set list!<CR>
 " Completions
 " ~~~~~~~~~~~
 " Use <Tab> and <S-Tab> to navigate through popup menu
-inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+" inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
+" inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
 " Auto close popup menu when finish completion
 augroup completionstuff
@@ -341,3 +355,20 @@ autocmd FileType cpp setlocal commentstring=//\ %s
 let g:vista_default_executive = 'nvim_lsp'
 nnoremap <leader>vd <cmd>Vista finder fzf:nvim_lsp<CR>
 nnoremap <leader>vv <cmd>Vista!!<CR>
+
+" Expand
+imap <expr> <C-j>   vsnip#expandable()  ? '<Plug>(vsnip-expand)'         : '<C-j>'
+smap <expr> <C-j>   vsnip#expandable()  ? '<Plug>(vsnip-expand)'         : '<C-j>'
+
+" Expand or jump
+imap <expr> <C-l>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
+smap <expr> <C-l>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
+
+" Jump forward or backward
+imap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'      : '<Tab>'
+smap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'      : '<Tab>'
+imap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
+smap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
+
+" possible value: 'UltiSnips', 'Neosnippet', 'vim-vsnip', 'snippets.nvim'
+let g:completion_enable_snippet = 'vim-vsnip'
